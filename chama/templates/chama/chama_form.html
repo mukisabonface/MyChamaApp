@@ -1,0 +1,28 @@
+{% extends 'chama/base_view.html' %}
+
+{% block content %}
+{% load bulma_tags %}
+
+
+<div class="container">
+  <div class="columns">
+
+    
+      <div class="column content is-two-fifths is-offset-one-fifth">
+      <p> Enter the chama details below:</p>
+
+      <form action="" method="POST">
+          {% csrf_token %}
+          {{ form|bulma }}
+          <div class="level">
+            <input type="submit" class=" level-left button is-link is-medium has-text-white" value="Submit">
+            <button class="button is-primary is-medium level-right"> <a class=" has-text-white" href="{% url 'home' %}">Cancel</a> </button>
+                       
+          </div>
+          
+      </form>
+
+    </div>
+    </div>
+  </div>
+{% endblock  %}

@@ -1,0 +1,42 @@
+{% extends 'chama/base_view.html' %}
+
+{% block content  %}
+
+<!--My chamas section-->
+<div class="container">
+
+    <div class="columns is-multiline" id="my-chamas">
+    {% if loanrequests_list %}
+        {% for loan in loanrequests_list%}
+        <div class="column is-mobile is-12-tablet is-6-desktop is-4-widescreen ">
+            <div class="card">
+                <div class="card-content">
+                    <h2 class="title is-4">
+                        {{ loan.chama.groupName }}
+                    </h2>
+                    <div class="level">
+                        <div class="is-left">
+                            <div>
+                                <p class="title is-5 has-text-weight-normal is-marginless">
+                                    Amount: <span class="has-text-primary">{{ loan.amount}}</span>
+                                </p>                                  
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <a class="button is-link is-outlined is-small" href="{% url 'pay' loan.chama.pk %}">Pay Loan</a>
+                </div>
+            </div>
+        </div> 
+        {% endfor %}  
+        {% else %}
+        <div class="column has-text-left">
+            <div class="notification">
+                You have no pending loans.
+            </div>       
+        </div> 
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

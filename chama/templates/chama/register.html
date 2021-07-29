@@ -1,0 +1,51 @@
+{% extends 'chama/base_site.html' %}
+
+{% block content  %}
+{% load bulma_tags %}
+<section class="hero is-fullheight has-background-white">
+    <div class="hero-body">
+        <div class="container">
+
+                <div class="column content is-two-fifths is-offset-one-fifth">
+
+                    <div class=" column has-text-left">
+                        <p class="is-medium has-text-grey-darker">
+                            Enter your details below to create an account:
+                        </p>
+
+                    </div>
+
+                    <!--In case of error messages-->
+                    {% if signinform.errors %}
+                    {% for field in signinform %}
+                    {% for error in field.errors %}
+                    <p class="help is-danger">{{ error|escape }}</p>
+
+
+                    {% endfor %}
+                    {% endfor %}
+                    {% for error in signinform.non_field_errors %}
+                    <p class="help is-danger">{{ error|escape }}</p>
+                    {% endfor %}
+                    {% endif %}
+                    <!--End error control-->
+
+                    <form class="box" action="" method="POST">
+                        {% csrf_token %}
+                        {{ form|bulma }}
+                        {% comment %} <div class="field">
+                            <button type="submit" class="button is-primary is-medium is-fullwidth"> <a href="{% url 'register' %}">Register</a> </button>
+                        </div> {% endcomment %}
+                        <input type="submit" class="button is-link is-medium is-fullwidth has-text-white" value="Register">
+                        
+
+                        
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock  %}

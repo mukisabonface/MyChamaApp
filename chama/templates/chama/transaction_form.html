@@ -1,0 +1,28 @@
+{% extends 'chama/base_view.html' %}
+
+{% block content  %}
+{% load bulma_tags %}
+
+<!--Make Payment Form-->
+<div class="column">
+    <!--A group member-->
+    <div class="column content is-two-fifths is-offset-one-fifth">
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{ form|bulma }}
+            <div class="buttons">
+                <input type="submit" class=" button is-link is-medium has-text-white" value="Pay" placeholder="Pay">
+                <button class="button is-primary is-medium is-right"> <a class=" has-text-white"
+                        href="{% url 'home' %}">Cancel</a> </button>
+
+            </div>
+
+
+        </form>
+    </div>
+
+
+</div>
+
+<!--End Make Payment Form-->
+{% endblock %}

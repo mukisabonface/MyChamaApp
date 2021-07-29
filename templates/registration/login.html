@@ -1,0 +1,54 @@
+{% extends 'chama/base_site.html' %}
+
+{% block content  %}
+{% load bulma_tags %}
+<section class="hero is-fullheight is-primary">
+    <div class="hero-body">
+        <div class="container">
+
+            <div class="columns">
+                <div class="column is-three-fifths is-offset-one-fifth has-text-centered">
+                    <h1 class="title is-1 is-spaced">Welcome to Haba!</h1>
+                    <h2 class="subtitle">A modern tool for managing your investment groups seamlessly</h2>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column is-4 is-offset-4">
+                    <!--In case of error messages-->
+                    {% if form.errors %}
+                    <p>Your username and password didn't match. Please try again.</p>
+                    {% endif %}
+
+                    {% if next %}
+                    {% if user.is_authenticated %}
+                    <p>Your account doesn't have access to this page. To proceed,
+                        please login with an account that has access.</p>
+                    
+                    {% endif %}
+                    {% endif %}
+                    <!--End error control-->
+
+                    
+                        <form class="box" action="{% url 'login' %}" method="POST">
+                            {% csrf_token %}
+                            {{ form|bulma }}
+                            <div class="field">
+                                <button type="submit" class="button is-primary is-medium is-fullwidth"> <a href="{% url 'login' %}">Login </a> </button>
+                            </div>
+                        <input type="hidden" name="next" value="{{ next }}"/>
+    
+                            
+                        </form>
+                    
+
+                    <div class="level">
+                        <p class="is-pulled-right"><a href="{% url 'password_reset' %}">Forgot password?</a></p>
+                        <p class="is-pulled-left"> <a href="{% url 'register' %}">Register</a> </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock  %}

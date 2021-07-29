@@ -1,0 +1,249 @@
+{% extends 'chama/base_view.html' %} {% block content %}
+
+<div class="column">
+    <div class="container">
+        <nav class="navbar" role="navigation" aria-label="dropdown navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item">
+                    <h1 class="title is-size-4-mobile is-medium has-text-weight-normal">
+                        {{ chama.groupName }}
+                    </h1>
+                </a>
+                <span class="navbar-burger burger" data-target="navbarMenuHeroA">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </div>
+
+            <div id="navbarMenuHeroA" class="navbar-menu">
+                <a class="navbar-item has-text-link" href="{% url 'pay' chama.pk %}">
+                    Make Payment
+                </a>
+
+                <a class="navbar-item has-text-link" href="{% url 'request-loan' chama.pk %}">
+                    Request Loan
+                </a>
+                {% if request.user == chama.get_admin %}
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">
+                        Admin
+                    </a>
+
+                    <div class="navbar-dropdown is-right">
+                        <a class="navbar-item" href="{% url 'add-member' chama.pk %}">
+                            Add Member
+                        </a>
+
+                        <a class="navbar-item" href="{% url 'chama-loans' chama.pk %}">
+                            Loan Requests
+                        </a>
+
+                        <a class="navbar-item" href="{% url 'set-meeting' chama.pk %}">
+                            Set Meeting
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </nav>
+        {% if chama.get_next_meeting %}
+        <div class="column is-three-fifths has-text-left bulma-notifications">
+            <div class="notification bulma-notifications">
+                <button class="delete " onclick="closeNotification()"></button>
+                {{ chama.created_by.email }}
+                The next meeting is on
+                <strong>{{chama.get_next_meeting.meeting_date|date:"D d M Y" }}</strong>. The venue is at
+                <strong> {{ chama.get_next_meeting.location }}</strong>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="column">
+            <section class="info-tiles">
+                <div class="tile is-ancestor has-text-centered">
+                    <div class="tile is-parent">
+                        <article class="tile is-child box">
+                            <p class="title has-text-danger">
+                                KES {{ chama.total_approved_loans|default_if_none:"0" }}
+                            </p>
+                            <p class="subtitle">Loans</p>
+                        </article>
+                    </div>
+                    <div class="tile is-parent">
+                        <article class="tile is-child box ">
+                            <p class="title has-text-success">
+                                KES {{ chama.get_total_balance }}
+                            </p>
+                            <p class="subtitle ">Account Balance</p>
+                        </article>
+                    </div>
+                    <div class="tile is-parent">
+                        <article class="tile is-child box">
+                            <p class="title has-text-primary">{{ chama.get_members }}</p>
+                            <p class="subtitle">Members</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!--   
+<div class="tabs is-toggle is-fullwidth is-medium">
+    <ul>
+      <li class="is-active" id="show">
+        <a>
+          <span class="icon"><i class="fas fa-image" aria-hidden="true"></i></span>
+          <span>Members</span>
+        </a>
+      </li>
+      <li>
+        <a>
+          <span class="icon"><i class="fas fa-music" aria-hidden="true"></i></span>
+          <span>Recent Transactions</span>
+        </a>
+      </li>
+      
+    </ul>
+  </div> -->
+
+        <nav class="tabs is-boxed is-fullwidth is-large">
+            <div class="container">
+                <ul>
+
+                    <li class="tab is-active" onclick="openTab(event,'transactions')">
+                        <a>Recent Transactions</a>
+                    </li>
+
+                    <li class="tab" onclick="openTab(event,'members')">
+                        <a>Members</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container section">
+            <!--Recent transactions-->
+            <div class="content-tab" id="transactions">
+                <div class="column is-four-fifths">
+                    <div class="column has-text-centered">
+                        <p class="title is-size-4">Most recent first</p>
+                    </div>
+                    <div class="table__wrapper">
+                        <table class="table is-hoverable is-fullwidth ">
+                            <thead>
+                                <tr>
+                                    <th>Phone</th>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                    <th>In Payment Of</th>
+                                    <th class="has-text-right">Amount</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Phone</th>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                    <th>In Payment Of</th>
+                                    <th class="has-text-right">Amount</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                {% for i in chama.transactions.all %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ i.member.phone_number }}</strong>
+                                    </td>
+                                    <td>
+                                        <strong>{{ i.member.first_name }} {{ i.member.last_name }}</strong>
+                                    </td>
+                                    <td>{{ i.transaction_time }}</td>
+                                    <td>
+                                        <span class="tag is-warning">
+                                            {{ i.transaction_type }}
+                                        </span>
+                                    </td>
+                                    <td class="has-text-right">KES {{ i.amount }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!--End recent transactions-->
+            <div class="columns is-multilined content-tab" id="members" style="display: none">
+
+                <!--A group member-->
+                {% for member in chama.members.all %}
+
+                <div class="column is-12-tablet is-6-desktop is-4-fullhd">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="media">
+                                <figure class="media-left">
+                                    <p class="image is-28x28">
+                                        <img src="https://bulma.io/images/placeholders/96x96.png"
+                                            alt="Placeholder image" />
+                                    </p>
+                                </figure>
+
+                                <div class="media-content">
+                                    <p class="title is-4">
+                                        {{ member.first_name }} {{ member.last_name }}
+                                        {% if chama.created_by == member %}
+                                        <span class="tag is-info">Admin</span>
+                                        {% endif %}
+                                    </p>
+                                    <p class="subtitle is-6">
+                                        {{ member.phone_number }}
+                                    </p>
+                                    <p><span class="is-small is-info"></span></p>
+                                </div>
+                            </div>
+                            <div class="media">
+                                
+                                <div class="media-left is-spaced">
+                                    
+                                    <p class="has-text-link is-medium is-spaced ">Arrears</p>
+                                    {% for key,value in arrears.items%}
+                                    {% if key == member %}
+                                    <small class="">{{ value|default_if_none:"0" }}</small>
+                                    {% endif %}
+                                    {% endfor %}
+                                </div>
+                                
+
+                                <div class="media-content is-spaced">
+                                    {% for key,value in deposits.items %}
+                                    {% if key == member%}
+                                    <p class="has-text-link is-medium">Deposits</p>
+                                    <small class="">{{ value|default_if_none:"0" }}</small>
+                                    {% endif  %}
+                                    {% endfor %}
+                                </div>
+                                
+                                {% if request.user == chama.get_admin %}
+                                    {% if chama.created_by != member %}
+                                <div class="media-right is-spaced">
+                                    <a class="button is-link is-outlined"
+                                        href="{% url  'remove-member' chama.pk member.phone_number %}">Remove</a>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                <!--End group member-->
+
+                <!--Recent Transactions-->
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+</div>

@@ -1,0 +1,20 @@
+{% extends "chama/base_site.html" %}
+
+{% block content %}
+<section class="hero is-fullheight has-background-primary">
+    <div class="hero-body">
+        <div class="container">
+
+            <div class="columns">
+                <div class="column is-three-fifths is-offset-one-fifth has-text-centered">
+                    <h1 class="title is-1 is-spaced">Thank you for using Haba!</h1>
+                    <p> Your loan request has been submitted successfully.</p>
+                    <a class="has-text-white" href="{% url 'home' %}"> Home </a> </button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

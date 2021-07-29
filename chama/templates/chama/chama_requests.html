@@ -1,0 +1,65 @@
+{% extends 'chama/base_view.html' %}
+
+{% block content  %}
+
+<!--My chamas section-->
+<div class="container">
+
+    <div class="columns is-multiline " id="my-chamas">
+        {% if loanrequests_list %}
+        {% for request in loanrequests_list%}
+        <div class="column is-mobile is-12-tablet is-6-desktop is-4-widescreen ">
+            <div class="card">
+                <div class="card-content">
+                    <div class="media">
+                        <!-- <figure class="media-left">
+                                <p class="image is-28x28">
+                                    <img src="https://bulma.io/images/placeholders/96x96.png"
+                                        alt="Placeholder image" />
+                                </p>
+                            </figure> -->
+
+                        <div class="media-content">
+                            <p class="title is-4">
+                                {{ request.user.first_name }}
+                                {{ request.user.last_name }}
+                            </p>
+                            <p class="subtitle is-6">
+                                {{ request.user.phone_number }}
+                            </p>
+
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="media-left is-spaced">
+                            <p class="has-text-danger is-medium is-spaced ">Amount Requested</p>
+                            <small class="">{{ request.amount}}</small>
+                        </div>
+
+                        <div class="media-content is-spaced">
+                            <p class="has-text-link is-medium">Member Arrears</p>
+                            <small class="">{{request.user.get_my_loans}}</small>
+                        </div>
+                    </div>
+                    <a class="button is-link is-outlined" href="{% url 'approve-loan' request.pk %}">Approve Loan</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="column content is-two-fifths is-offset-one-fifth">
+           
+            <div class="notification is-danger">
+                
+                <div class="alert alert-{{ message.tags }}">
+                    <p class=" is-medium is-spaced ">No loan requests</p>
+                </div>
+                
+            </div>
+            
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

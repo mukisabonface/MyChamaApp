@@ -1,0 +1,101 @@
+{% extends 'chama/base_view.html' %}
+
+{% block content  %}
+
+<div class="column">
+
+  <!--My accounts section-->
+
+
+  <div class="column has-text-left is-four-fifths ">    
+        <div class="container">
+          <h1 class="title">
+            Hello, {{request.user.last_name}}.
+          </h1>
+          <h2 class="subtitle">
+            I hope you are having a great day! Here's your account summary.
+          </h2>
+        </div>      
+  </div>
+
+  <div class="columns is-multiline">
+      <div class="column is-12-tablet is-6-desktop is-4-widescreen">
+      <div class="notification is-info has-text">
+        <p class="title is-medium">{{request.user.get_chamas}}</p>
+        <p class="subtitle is-small">My Chamas</p>
+      </div>
+    </div>
+    <div class="column is-12-tablet is-6-desktop is-3-widescreen">
+      <div class="notification is-danger has-text">
+        <p class="title is-medium">{{request.user.get_my_loans}}</p>
+        <p class="subtitle is-small">My Loans</p>
+      </div>
+    </div>
+    <div class="column is-12-tablet is-6-desktop is-3-widescreen">
+      <div class="notification is-success has-text">
+        <p class="title is-medium">KES {{ request.user.get_my_savings }}</p>
+        <p class="subtitle is-small">My Savings</p>
+      </div>
+    </div>
+  </div>
+  <!--End my accounts-->
+  <div class=" column has-text-left">
+      <p class="is-size-3 ">Recent Transactions
+          
+        </p>
+  </div>
+
+  
+
+  <!--Recent Transactions-->
+  
+  <div class="column is-four-fifths ">
+    <div class="table__wrapper">
+    <table class="table is-hoverable is-fullwidth ">
+      <thead>
+        <tr>
+          <th>Transaction #</th>
+          <th>Chama</th>
+          <th>Date</th>
+          <th>In Payment Of</th>
+          <th class="has-text-right">Amount</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <th>Transaction #</th>
+          <th>Chama</th>
+          <th>Date</th>
+          <th>In Payment Of</th>
+          <th class="has-text-right">Amount</th>
+        </tr>
+      </tfoot>
+      <tbody>
+        {% for i in request.user.transactions.all %}
+        <tr>
+          <td>
+            <strong>{{i.id}}</strong>
+          </td>
+          <td>
+            <a href="{{ i.chama.get_absolute_url  }}">{{i.chama}}</a>
+          </td>
+          <td>{{i.transaction_time}}</td>
+          <td>
+            <span class="tag is-warning">
+              {{i.transaction_type}}
+            </span>
+          </td>
+          <td class="has-text-right">KES {{i.amount}}</td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!--End recent transactions-->
+
+</div>
+
+{% endblock  %}

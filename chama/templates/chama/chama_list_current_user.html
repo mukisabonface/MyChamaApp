@@ -1,0 +1,56 @@
+{% extends 'chama/base_view.html' %}
+
+{% block content  %}
+
+<!--My chamas section-->
+<div class="container">
+
+    <div class="columns is-multiline " id="my-chamas" >
+    {% if chama_list %}
+        {% for chama in chama_list%}
+        <div class="column is-mobile is-12-tablet is-6-desktop is-4-widescreen ">
+            <div class="card">
+                <div class="card-content">
+                <div class="media">
+                    <div class="media-left">
+                        <figure class="image is-48x48">
+                            <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                        </figure>
+                    </div>
+                    <div class="media-content">
+                        <p class="title is-4 has-text-weight-normal">{{ chama.groupName }} <span class="tag is-warning">{{ chama.contribution_amnt }}pm</span></p>
+                        <p class="subtitle is-6"> <i class="fas fa-users"> </i> {{ chama.get_members}}</p>
+                        
+                    </div>
+                </div>
+
+                    <div class="level is-centered">
+                        <div class="is-left">
+                            <div>
+                                <span class="tag is-info">Net Value</span>
+                                <span class="is-small"> KES {{chama.get_total_balance}}</span>                               
+                                
+                            </div>
+                        </div>
+
+                        <div class="is-right">
+                            <a class="button is-link is-small is-outlined" href="{% url 'chama_detail' chama.pk %}">See More</a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div> 
+        {% endfor %}  
+        {% else %}
+        <div class="column has-text-left">
+            <div class="notification">
+                You don't belong to any chama.
+                <a href="{% url 'create-chama' %}">Create a chama </a>
+            </div>       
+        </div> 
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
